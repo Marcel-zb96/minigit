@@ -12,3 +12,33 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User{
+  id    Int @default(autoincrement()) @id
+  login String  @db.VarChar(255)
+  avatar_url  String  @db.VarChar(255)
+  html_url String  @db.VarChar(255)
+  type  String  @db.VarChar(255)
+  repositories Repository[]
+  contributions Contribution[]
+}
+
+model Repository {
+  id    Int   @default(autoincrement()) @id
+  owner User  @relation(fields: [ownerId], references: [id])
+  ownerId Int 
+  full_name String  @db.VarChar(255)
+  description String  @db.VarChar(255)
+  html_url  String  @db.VarChar(255)
+  language  String  @db.VarChar(255)
+  stargazers_count  Int
+  contributions Contribution[]
+}
+
+model Contribution {
+  id  Int @default(autoincrement()) @id
+  user  User  @relation(fields: [userId], references: [id])
+  userId Int
+  repository  Repository @relation(fields: [repositoryId], references: [id])
+  repositoryId  Int
+}
