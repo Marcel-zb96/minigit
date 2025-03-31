@@ -1,22 +1,31 @@
-export class UserDto {
-  id: number;
-  login: string;
-  avatar_url: string;
-  html_url: string;
-  type: string;
-}
+import { z } from 'zod';
 
-export class ContributionDto {
-  author: UserDto;
-}
+export const UserDtoSchema = z.object({
+  id: z.number(),
+  login: z.string(),
+  avatar_url: z.string(),
+  html_url: z.string(),
+  type: z.string(),
+});
 
-export class RepositoryDto {
-  id: number;
-  owner: UserDto;
-  full_name: string;
-  description: string;
-  html_url: string;
-  language: string;
-  stargazers_count: number;
-  commits_url: string;
-}
+export const ContributionDtoSchema = z.object({
+  author: UserDtoSchema,
+});
+
+export const RepositoryDtoSchema = z.object({
+  id: z.number(),
+  owner: UserDtoSchema,
+  full_name: z.string(),
+  description: z.string(),
+  html_url: z.string(),
+  language: z.string(),
+  stargazers_count: z.number(),
+  commits_url: z.string(),
+});
+
+export const RepositoryPartialDtoSchema = RepositoryDtoSchema.partial();
+
+export type UserDto = z.infer<typeof UserDtoSchema>;
+export type ContributionDto = z.infer<typeof ContributionDtoSchema>;
+export type RepositoryDto = z.infer<typeof RepositoryDtoSchema>;
+export type RepositoryPartialDto = z.infer<typeof RepositoryPartialDtoSchema>;
