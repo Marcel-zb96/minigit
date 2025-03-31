@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { DataService } from './data.service';
 
-@Controller()
-export class DataController {}
+@Controller('api')
+export class DataController {
+  constructor(private readonly dataService: DataService) {}
+
+  @Get('/v1/sync')
+  async syncDb(): Promise<void> {
+    await this.dataService.syncDb();
+  }
+}
