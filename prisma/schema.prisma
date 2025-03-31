@@ -21,6 +21,8 @@ model User{
   type  String  @db.VarChar(255)
   repositories Repository[]
   contributions Contribution[]
+
+  @@index([login])
 }
 
 model Repository {
@@ -33,6 +35,8 @@ model Repository {
   language  String?  @db.VarChar(255)
   stargazers_count  Int?
   contributions Contribution[]
+
+  @@index([full_name])
 }
 
 model Contribution {
