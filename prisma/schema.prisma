@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User{
-  id    Int @default(autoincrement()) @id
+  id    Int  @id
   login String  @db.VarChar(255)
   avatar_url  String  @db.VarChar(255)
   html_url String  @db.VarChar(255)
@@ -24,14 +24,14 @@ model User{
 }
 
 model Repository {
-  id    Int   @default(autoincrement()) @id
+  id    Int   @id
   owner User  @relation(fields: [ownerId], references: [id])
   ownerId Int 
   full_name String  @db.VarChar(255)
-  description String  @db.VarChar(255)
-  html_url  String  @db.VarChar(255)
-  language  String  @db.VarChar(255)
-  stargazers_count  Int
+  description String?  @db.VarChar(255)
+  html_url  String?  @db.VarChar(255)
+  language  String?  @db.VarChar(255)
+  stargazers_count  Int?
   contributions Contribution[]
 }
 
