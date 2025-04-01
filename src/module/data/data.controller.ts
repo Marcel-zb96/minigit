@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { DataService } from './data.service';
-import { ResponseRepositoryDto } from 'src/schema/repository.schema';
+import { CreateRepositoryDto, ResponseRepositoryDto } from 'src/schema/repository.schema';
 import { ResponseContributionDto } from 'src/schema/contribution.schema';
+import { ResponseUserDto } from 'src/schema/user.schema';
 
 @Controller('api')
 export class DataController {
@@ -20,5 +21,15 @@ export class DataController {
   @Get('/v1/repository/:id/contributions')
   async getContributors(@Param('id') id: string): Promise<ResponseContributionDto[]> {
     return await this.dataService.getContributors(id);
+  }
+
+  @Get('/v1/user')
+  async getAllUser(): Promise<ResponseUserDto[]> {
+    return await this.dataService.getAllUser();
+  }
+
+  @Post('v1/repository')
+  async createRepository(@Body() newRepositoryDto: CreateRepositoryDto) {
+    return await this.dataService.createRepository(newRepositoryDto);
   }
 }
