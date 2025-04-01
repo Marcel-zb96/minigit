@@ -1,8 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ContributionDto, RepositoryDto, UserDto } from './repository.dto';
 import { ConfigService } from '@nestjs/config';
+import { UserDto } from 'src/schema/user.schema';
+import {
+  GitRepositoryDto,
+  ResponseRepositoryDto,
+  GitRepositoryPartialDto,
+  GitRepositoryPartialDtoSchema,
+} from 'src/schema/repository.schema';
+import { ContributionDto } from 'src/schema/contribution.schema';
 
 @Injectable()
 export class DataService {
@@ -22,7 +29,7 @@ export class DataService {
       },
     };
 
-    const repositoriesResponse = await axios.get<RepositoryDto[]>(
+    const repositoriesResponse = await axios.get<GitRepositoryDto[]>(
       'https://api.github.com/orgs/facebook/repos',
       requestConfig,
     );
@@ -36,6 +43,38 @@ export class DataService {
 
       await this.populateUsersAndContributions(gitRepository.id, contributions);
     }
+  }
+
+  async getRepositories(queryParam: string): Promise<ResponseRepositoryDto[]> {
+    const filter: GitRepositoryPartialDto = GitRepositoryPartialDtoSchema.parse({
+      [queryParam.split(':')[0]]: queryParam.split(':')[1],
+    });
+
+    const repositories: ResponseRepositoryDto[] = await this.prismaService.repository.findMany({
+      where: {
+        ...filter,
+      },
+      select: {
+        id: true,
+        owner: {
+          select: {
+            id: true,
+            login: true,
+          },
+        },
+        full_name: true,
+        description: true,
+        language: true,
+        stargazers_count: true,
+        _count: {
+          select: {
+            contributions: true,
+          },
+        },
+      },
+    });
+
+    return repositories;
   }
 
   private async populateUsersAndContributions(repositoryId: number, contributions: ContributionDto[]) {
@@ -69,7 +108,7 @@ export class DataService {
     });
   }
 
-  private async populateRepositories(repositories: RepositoryDto[]) {
+  private async populateRepositories(repositories: GitRepositoryDto[]) {
     await this.prismaService.$transaction(async (prisma) => {
       const owner: UserDto = repositories[0].owner;
 
