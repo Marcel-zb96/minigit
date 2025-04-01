@@ -45,4 +45,5 @@ model Contribution {
   userId Int
   repository  Repository @relation(fields: [repositoryId], references: [id])
   repositoryId  Int
+  line_count Int @default(0)
 }

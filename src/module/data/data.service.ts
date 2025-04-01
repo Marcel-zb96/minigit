@@ -9,7 +9,7 @@ import {
   GitRepositoryPartialDto,
   GitRepositoryPartialDtoSchema,
 } from 'src/schema/repository.schema';
-import { ContributionDto } from 'src/schema/contribution.schema';
+import { ContributionDto, GitCommitDto, ResponseContributionDto } from 'src/schema/contribution.schema';
 
 @Injectable()
 export class DataService {
@@ -38,8 +38,15 @@ export class DataService {
     for (const gitRepository of repositoriesResponse.data) {
       const commitsUrl = gitRepository.commits_url.replace('{/sha}', '');
 
-      const commits = await axios.get<ContributionDto[]>(commitsUrl, requestConfig);
-      const contributions: ContributionDto[] = commits.data.filter((commit) => commit.author?.id);
+      const commits = await axios.get<GitCommitDto[]>(commitsUrl, requestConfig);
+      const validCommits: GitCommitDto[] = commits.data.filter((commit) => commit.author?.id);
+
+      const contributions: ContributionDto[] = await Promise.all(
+        validCommits.map(async (commit: GitCommitDto) => {
+          const contributionResponse = await axios.get<ContributionDto>(commit.url, requestConfig);
+          return contributionResponse.data;
+        }),
+      );
 
       await this.populateUsersAndContributions(gitRepository.id, contributions);
     }
@@ -77,6 +84,22 @@ export class DataService {
     return repositories;
   }
 
+  async getContributors(repositoryId: string): Promise<ResponseContributionDto[]> {
+    return await this.prismaService.contribution.findMany({
+      select: {
+        user: {
+          select: {
+            login: true,
+          },
+        },
+        line_count: true,
+      },
+      where: {
+        repositoryId: parseInt(repositoryId),
+      },
+    });
+  }
+
   private async populateUsersAndContributions(repositoryId: number, contributions: ContributionDto[]) {
     await this.prismaService.$transaction(async (prisma) => {
       for (const contribution of contributions) {
@@ -86,6 +109,7 @@ export class DataService {
             contributions: {
               create: {
                 repository: { connect: { id: repositoryId } },
+                line_count: contribution.stats.total,
               },
             },
           },
