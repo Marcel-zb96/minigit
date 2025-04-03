@@ -3,7 +3,7 @@ import { DataController } from './data.controller';
 import { DataService } from './data.service';
 import { CreateRepositoryDto, ResponseRepositoryDto } from 'src/schema/repository.schema';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/module/prisma/prisma.service';
 import { Logger } from '@nestjs/common';
 import { ResponseContributionDto } from 'src/schema/contribution.schema';
 import { ResponseUserDto } from 'src/schema/user.schema';

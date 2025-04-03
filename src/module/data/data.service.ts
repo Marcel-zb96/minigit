@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/module/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { ResponseUserDto, UserDto } from 'src/schema/user.schema';
 import {
