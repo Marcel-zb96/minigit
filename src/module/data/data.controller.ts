@@ -29,7 +29,7 @@ export class DataController {
   }
 
   @Post('v1/repository')
-  async createRepository(@Body() newRepositoryDto: CreateRepositoryDto) {
+  async createRepository(@Body() newRepositoryDto: CreateRepositoryDto): Promise<ResponseRepositoryDto> {
     return await this.dataService.createRepository(newRepositoryDto);
   }
 }

@@ -18,5 +18,8 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "strict": true,
+    "paths": {
+      "src/*": ["./src/*"],
+    },
   }
 }
