@@ -67,7 +67,7 @@ export class LoggerMiddleware implements NestMiddleware {
             const responseLog = {
                 response: {
                     statusCode: res.statusCode,
-                    body: JSON.parse(body) || body || {},
+                    body: this.parseResponseBody(body),
                     headers: res.getHeaders(),
                 },
             }; 
@@ -82,6 +82,15 @@ export class LoggerMiddleware implements NestMiddleware {
             rawResponseEnd.apply(res, resArgs);
             return responseLog as unknown as Response;
         };
+    }
+    
+    private parseResponseBody(body: string) {
+        try {
+            return body ? JSON.parse(body) : {}
+        } catch (error) {
+            this.logger.error(error);
+            return body;
+        }
     }
 
     private hasResponseBody(response: any): boolean {

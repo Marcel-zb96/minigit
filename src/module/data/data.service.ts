@@ -181,9 +181,10 @@ export class DataService {
         });
       }
     });
+    this.logger.log(`Users and contributions populated for repository id: ${repositoryId}`);
   }
 
-  private async populateRepositories(repositories: GitRepositoryDto[]) {
+  private async populateRepositories(repositories: GitRepositoryDto[]): Promise<void> {
     await this.prismaService.$transaction(async (prisma) => {
       const owner: UserDto = repositories[0].owner;
 
@@ -211,6 +212,7 @@ export class DataService {
         },
       });
     });
+    this.logger.log('Repositories populated');
   }
 
   private async resetDb(): Promise<void> {
