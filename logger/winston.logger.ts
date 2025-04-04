@@ -17,11 +17,7 @@ const options = {
 
 const devLogger = {
   level: 'info',
-  format: format.combine(
-    format.timestamp(),
-    format.errors({ stack: true }),
-    customFormat,
-  ),
+  format: format.combine(format.timestamp(), format.errors({ stack: true }), customFormat),
   transports: [new transports.Console(options.console)],
 };
 
