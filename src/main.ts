@@ -11,6 +11,7 @@ async function bootstrap() {
       instance: instance,
     }),
   });
+  app.setGlobalPrefix('api/v1');
 
   const config = new DocumentBuilder().setTitle('bootcamp').setVersion('1.0').build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
