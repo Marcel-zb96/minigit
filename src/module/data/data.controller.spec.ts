@@ -43,7 +43,8 @@ describe('DataConrtroller', () => {
     it('should return undefined', async () => {
       jest.spyOn(dataService, 'populateDb').mockImplementation(() => Promise.resolve(undefined));
 
-      expect(await dataController.populateDb()).toBe(undefined);
+      const url: string = 'https://api.github.com/orgs/facebook/repos';
+      expect(await dataController.populateDb(url)).toBe(undefined);
     });
   });
 });
