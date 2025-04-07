@@ -63,18 +63,23 @@ export class DataService {
 
   private async populateUsersAndContributions(repositoryId: number, contributions: ContributionDto[]) {
     for (const contribution of contributions) {
+      const repository = await this.prismaService.repository.findUnique({
+        where: {
+          github_id: repositoryId,
+        },
+      });
       await this.prismaService.user.upsert({
-        where: { id: contribution.author.id },
+        where: { github_id: contribution.author.id },
         update: {
           contributions: {
             create: {
-              repository: { connect: { id: repositoryId } },
+              repository: { connect: { id: repository?.id } },
               line_count: contribution.stats.total,
             },
           },
         },
         create: {
-          id: contribution.author.id,
+          github_id: contribution.author.id,
           login: contribution.author.login,
           avatar_url: contribution.author.avatar_url,
           html_url: contribution.author.html_url,
@@ -82,7 +87,7 @@ export class DataService {
           contributions: {
             create: {
               repository: {
-                connect: { id: repositoryId },
+                connect: { id: repository?.id },
               },
             },
           },
@@ -97,7 +102,7 @@ export class DataService {
 
     await this.prismaService.user.create({
       data: {
-        id: owner.id,
+        github_id: owner.id,
         login: owner.login,
         avatar_url: owner.avatar_url,
         html_url: owner.html_url,
@@ -106,7 +111,7 @@ export class DataService {
           createMany: {
             data: repositories.map((repo) => {
               return {
-                id: repo.id,
+                github_id: repo.id,
                 full_name: repo.full_name,
                 description: repo.description,
                 html_url: repo.html_url,

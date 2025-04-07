@@ -50,9 +50,9 @@ describe('RepositoryController', () => {
           description: 'test_description',
           language: 'C++',
           stargazers_count: 0,
-          id: 1,
+          id: '1',
           owner: {
-            id: 1,
+            id: '1',
             login: 'test_username',
           },
           _count: {
@@ -102,9 +102,9 @@ describe('RepositoryController', () => {
         description: 'test_description',
         language: 'C++',
         stargazers_count: 0,
-        id: 1,
+        id: '1',
         owner: {
-          id: 1,
+          id: '1',
           login: 'test_username',
         },
         _count: {

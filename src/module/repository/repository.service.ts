@@ -3,10 +3,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ResponseContributionDto } from 'src/schema/contribution.schema';
 import {
   ResponseRepositoryDto,
-  GitRepositoryPartialDto,
-  GitRepositoryPartialDtoSchema,
   CreateRepositoryDto,
   ResponseRepositoryDtoSchema,
+  RepositoryQuerySchema,
 } from 'src/schema/repository.schema';
 
 @Injectable()
@@ -14,13 +13,15 @@ export class RepositoryService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async getRepositories(queryParam: string): Promise<ResponseRepositoryDto[]> {
-    const filter: GitRepositoryPartialDto = GitRepositoryPartialDtoSchema.parse({
+    const filter = RepositoryQuerySchema.safeParse({
       [queryParam.split(':')[0]]: queryParam.split(':')[1],
     });
 
+    if (!filter.success) return [];
+
     const repositories: ResponseRepositoryDto[] = await this.prismaService.repository.findMany({
       where: {
-        ...filter,
+        ...filter.data,
       },
       select: {
         id: true,
@@ -56,26 +57,15 @@ export class RepositoryService {
         line_count: true,
       },
       where: {
-        repositoryId: parseInt(repositoryId),
+        repositoryId: repositoryId,
       },
     });
   }
 
   async createRepository(repositoryDto: CreateRepositoryDto): Promise<ResponseRepositoryDto> {
     return await this.prismaService.$transaction(async (prisma) => {
-      const lastUser = await prisma.user.aggregate({
-        _max: { id: true },
-      });
-      const lastRepository = await prisma.repository.aggregate({
-        _max: { id: true },
-      });
-
-      const newRepoId = lastRepository._max.id ? lastRepository._max.id + 1 : 1;
-      const newUserId = lastUser._max.id ? lastUser._max.id + 1 : 1;
-
       const newRepository = await prisma.repository.create({
         data: {
-          id: newRepoId,
           full_name: repositoryDto.full_name,
           description: repositoryDto.description,
           html_url: repositoryDto.full_name,
@@ -83,7 +73,6 @@ export class RepositoryService {
           stargazers_count: repositoryDto.stargazers_count,
           owner: {
             create: {
-              id: newUserId,
               login: repositoryDto.owner.login,
               avatar_url: '',
               html_url: `https://github.com/${repositoryDto.owner.login}`,
