@@ -1,0 +1,91 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { ResponseContributionDto } from 'src/schema/contribution.schema';
+import {
+  ResponseRepositoryDto,
+  CreateRepositoryDto,
+  ResponseRepositoryDtoSchema,
+  RepositoryQuerySchema,
+} from 'src/schema/repository.schema';
+
+@Injectable()
+export class RepositoryService {
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async getRepositories(queryParam: string): Promise<ResponseRepositoryDto[]> {
+    const filter = RepositoryQuerySchema.safeParse({
+      [queryParam.split(':')[0]]: queryParam.split(':')[1],
+    });
+
+    if (!filter.success) return [];
+
+    const repositories: ResponseRepositoryDto[] = await this.prismaService.repository.findMany({
+      where: {
+        ...filter.data,
+      },
+      select: {
+        id: true,
+        owner: {
+          select: {
+            id: true,
+            login: true,
+          },
+        },
+        full_name: true,
+        description: true,
+        language: true,
+        stargazers_count: true,
+        _count: {
+          select: {
+            contributions: true,
+          },
+        },
+      },
+    });
+
+    return repositories;
+  }
+
+  async getContributors(repositoryId: string): Promise<ResponseContributionDto[]> {
+    return await this.prismaService.contribution.findMany({
+      select: {
+        user: {
+          select: {
+            login: true,
+          },
+        },
+        line_count: true,
+      },
+      where: {
+        repositoryId: repositoryId,
+      },
+    });
+  }
+
+  async createRepository(repositoryDto: CreateRepositoryDto): Promise<ResponseRepositoryDto> {
+    return await this.prismaService.$transaction(async (prisma) => {
+      const newRepository = await prisma.repository.create({
+        data: {
+          full_name: repositoryDto.full_name,
+          description: repositoryDto.description,
+          html_url: repositoryDto.full_name,
+          language: repositoryDto.language,
+          stargazers_count: repositoryDto.stargazers_count,
+          owner: {
+            create: {
+              login: repositoryDto.owner.login,
+              avatar_url: '',
+              html_url: `https://github.com/${repositoryDto.owner.login}`,
+              type: repositoryDto.owner.type,
+            },
+          },
+        },
+        include: {
+          owner: true,
+        },
+      });
+
+      return ResponseRepositoryDtoSchema.parse(newRepository);
+    });
+  }
+}

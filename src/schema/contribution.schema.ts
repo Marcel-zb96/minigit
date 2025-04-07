@@ -1,13 +1,13 @@
 import { z } from 'zod';
-import { UserDtoSchema } from './user.schema';
+import { GitUserDtoSchema } from './user.schema';
 
 export const GitCommitDtoSchema = z.object({
   url: z.string(),
-  author: UserDtoSchema.nullable(),
+  author: GitUserDtoSchema.nullable(),
 });
 
 export const ContributionDtoSchema = z.object({
-  author: UserDtoSchema,
+  author: GitUserDtoSchema,
   stats: z.object({
     total: z.number(),
   }),

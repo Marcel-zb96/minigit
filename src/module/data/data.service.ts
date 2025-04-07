@@ -2,16 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import { PrismaService } from 'src/module/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { ResponseUserDto, UserDto } from 'src/schema/user.schema';
-import {
-  GitRepositoryDto,
-  ResponseRepositoryDto,
-  GitRepositoryPartialDto,
-  GitRepositoryPartialDtoSchema,
-  CreateRepositoryDto,
-  ResponseRepositoryDtoSchema,
-} from 'src/schema/repository.schema';
-import { ContributionDto, GitCommitDto, ResponseContributionDto } from 'src/schema/contribution.schema';
+import { UserDto } from 'src/schema/user.schema';
+import { GitRepositoryDto } from 'src/schema/repository.schema';
+import { ContributionDto, GitCommitDto } from 'src/schema/contribution.schema';
 
 @Injectable()
 export class DataService {
@@ -21,9 +14,9 @@ export class DataService {
     private readonly configService: ConfigService,
   ) {}
 
-  async syncDb() {
-    await this.resetDb();
+  async populateDb(org: string) {
     const gitToken = this.configService.get<string>('GITHUB_TOKEN');
+    const url = `https://api.github.com/orgs/${org}/repos`;
     const requestConfig = {
       headers: {
         Accept: 'application/vnd.github.v3+json',
@@ -31,196 +24,113 @@ export class DataService {
       },
     };
 
-    const repositoriesResponse = await axios.get<GitRepositoryDto[]>(
-      'https://api.github.com/orgs/facebook/repos',
-      requestConfig,
-    );
-    await this.populateRepositories(repositoriesResponse.data);
+    const repositoriesResponse = await axios.get<GitRepositoryDto[]>(url, requestConfig);
 
-    for (const gitRepository of repositoriesResponse.data) {
+    const contributions = await this.getContributions(requestConfig, repositoriesResponse.data);
+
+    void this.prismaService.$transaction(async () => {
+      await this.resetDb();
+      await this.populateRepositories(repositoriesResponse.data);
+      for (const contribution of contributions) {
+        await this.populateUsersAndContributions(contribution.repoId, contribution.commits);
+      }
+    });
+  }
+
+  private async getContributions(
+    requestConfig: { headers: { Accept: string; Authorization: string } },
+    gitRepositories: GitRepositoryDto[],
+  ) {
+    const contributions: { repoId: number; commits: ContributionDto[] }[] = [];
+    for (const gitRepository of gitRepositories) {
       const commitsUrl = gitRepository.commits_url.replace('{/sha}', '');
 
-      const commits = await axios.get<GitCommitDto[]>(commitsUrl, requestConfig);
-      const validCommits: GitCommitDto[] = commits.data.filter((commit) => commit.author?.id);
+      const gitCommits = await axios.get<GitCommitDto[]>(commitsUrl, requestConfig);
+      const validCommits: GitCommitDto[] = gitCommits.data.filter((gitCommit) => gitCommit.author?.id);
 
-      const contributions: ContributionDto[] = await Promise.all(
+      const commits: ContributionDto[] = await Promise.all(
         validCommits.map(async (commit: GitCommitDto) => {
-          const contributionResponse = await axios.get<ContributionDto>(commit.url, requestConfig);
-          return contributionResponse.data;
+          const commitResponse = await axios.get<ContributionDto>(commit.url, requestConfig);
+          return commitResponse.data;
         }),
       );
-
-      await this.populateUsersAndContributions(gitRepository.id, contributions);
+      contributions.push({
+        repoId: gitRepository.id,
+        commits: commits,
+      });
     }
-  }
-
-  async getRepositories(queryParam: string): Promise<ResponseRepositoryDto[]> {
-    const filter: GitRepositoryPartialDto = GitRepositoryPartialDtoSchema.parse({
-      [queryParam.split(':')[0]]: queryParam.split(':')[1],
-    });
-
-    const repositories: ResponseRepositoryDto[] = await this.prismaService.repository.findMany({
-      where: {
-        ...filter,
-      },
-      select: {
-        id: true,
-        owner: {
-          select: {
-            id: true,
-            login: true,
-          },
-        },
-        full_name: true,
-        description: true,
-        language: true,
-        stargazers_count: true,
-        _count: {
-          select: {
-            contributions: true,
-          },
-        },
-      },
-    });
-
-    return repositories;
-  }
-
-  async getContributors(repositoryId: string): Promise<ResponseContributionDto[]> {
-    return await this.prismaService.contribution.findMany({
-      select: {
-        user: {
-          select: {
-            login: true,
-          },
-        },
-        line_count: true,
-      },
-      where: {
-        repositoryId: parseInt(repositoryId),
-      },
-    });
-  }
-
-  async getAllUser(): Promise<ResponseUserDto[]> {
-    return await this.prismaService.user.findMany({
-      select: {
-        login: true,
-        avatar_url: true,
-        type: true,
-      },
-    });
-  }
-
-  async createRepository(repositoryDto: CreateRepositoryDto): Promise<ResponseRepositoryDto> {
-    return await this.prismaService.$transaction(async (prisma) => {
-      const lastUser = await prisma.user.aggregate({
-        _max: { id: true },
-      });
-      const lastRepository = await prisma.repository.aggregate({
-        _max: { id: true },
-      });
-
-      const newRepoId = lastRepository._max.id ? lastRepository._max.id + 1 : 1;
-      const newUserId = lastUser._max.id ? lastUser._max.id + 1 : 1;
-
-      const newRepository = await prisma.repository.create({
-        data: {
-          id: newRepoId,
-          full_name: repositoryDto.full_name,
-          description: repositoryDto.description,
-          html_url: repositoryDto.full_name,
-          language: repositoryDto.language,
-          stargazers_count: repositoryDto.stargazers_count,
-          owner: {
-            create: {
-              id: newUserId,
-              login: repositoryDto.owner.login,
-              avatar_url: '',
-              html_url: `https://github.com/${repositoryDto.owner.login}`,
-              type: repositoryDto.owner.type,
-            },
-          },
-        },
-        include: {
-          owner: true,
-        },
-      });
-
-      return ResponseRepositoryDtoSchema.parse(newRepository);
-    });
+    return contributions;
   }
 
   private async populateUsersAndContributions(repositoryId: number, contributions: ContributionDto[]) {
-    await this.prismaService.$transaction(async (prisma) => {
-      for (const contribution of contributions) {
-        await prisma.user.upsert({
-          where: { id: contribution.author.id },
-          update: {
-            contributions: {
-              create: {
-                repository: { connect: { id: repositoryId } },
-                line_count: contribution.stats.total,
+    for (const contribution of contributions) {
+      const repository = await this.prismaService.repository.findUnique({
+        where: {
+          github_id: repositoryId,
+        },
+      });
+      await this.prismaService.user.upsert({
+        where: { github_id: contribution.author.id },
+        update: {
+          contributions: {
+            create: {
+              repository: { connect: { id: repository?.id } },
+              line_count: contribution.stats.total,
+            },
+          },
+        },
+        create: {
+          github_id: contribution.author.id,
+          login: contribution.author.login,
+          avatar_url: contribution.author.avatar_url,
+          html_url: contribution.author.html_url,
+          type: contribution.author.type,
+          contributions: {
+            create: {
+              repository: {
+                connect: { id: repository?.id },
               },
             },
           },
-          create: {
-            id: contribution.author.id,
-            login: contribution.author.login,
-            avatar_url: contribution.author.avatar_url,
-            html_url: contribution.author.html_url,
-            type: contribution.author.type,
-            contributions: {
-              create: {
-                repository: {
-                  connect: { id: repositoryId },
-                },
-              },
-            },
-          },
-        });
-      }
-    });
+        },
+      });
+    }
     this.logger.log(`Users and contributions populated for repository id: ${repositoryId}`);
   }
 
   private async populateRepositories(repositories: GitRepositoryDto[]): Promise<void> {
-    await this.prismaService.$transaction(async (prisma) => {
-      const owner: UserDto = repositories[0].owner;
+    const owner: UserDto = repositories[0].owner;
 
-      await prisma.user.create({
-        data: {
-          id: owner.id,
-          login: owner.login,
-          avatar_url: owner.avatar_url,
-          html_url: owner.html_url,
-          type: owner.type,
-          repositories: {
-            createMany: {
-              data: repositories.map((repo) => {
-                return {
-                  id: repo.id,
-                  full_name: repo.full_name,
-                  description: repo.description,
-                  html_url: repo.html_url,
-                  language: repo.language,
-                  stargazers_count: repo.stargazers_count,
-                };
-              }),
-            },
+    await this.prismaService.user.create({
+      data: {
+        github_id: owner.id,
+        login: owner.login,
+        avatar_url: owner.avatar_url,
+        html_url: owner.html_url,
+        type: owner.type,
+        repositories: {
+          createMany: {
+            data: repositories.map((repo) => {
+              return {
+                github_id: repo.id,
+                full_name: repo.full_name,
+                description: repo.description,
+                html_url: repo.html_url,
+                language: repo.language,
+                stargazers_count: repo.stargazers_count,
+              };
+            }),
           },
         },
-      });
+      },
     });
     this.logger.log('Repositories populated');
   }
 
   private async resetDb(): Promise<void> {
-    const deleteUsers = this.prismaService.user.deleteMany();
-    const deleteContributions = this.prismaService.contribution.deleteMany();
-    const deleteRepositories = this.prismaService.repository.deleteMany();
-
-    await this.prismaService.$transaction([deleteContributions, deleteRepositories, deleteUsers]);
+    await this.prismaService.contribution.deleteMany();
+    await this.prismaService.repository.deleteMany();
+    await this.prismaService.user.deleteMany();
 
     this.logger.log('Database reseted, all tables are empty');
   }

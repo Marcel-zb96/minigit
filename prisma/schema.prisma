@@ -14,7 +14,8 @@ datasource db {
 }
 
 model User{
-  id    Int  @id
+  id    String  @default(uuid()) @id
+  github_id Int? @unique
   login String  @db.VarChar(255)
   avatar_url  String  @db.VarChar(255)
   html_url String  @db.VarChar(255)
@@ -26,24 +27,25 @@ model User{
 }
 
 model Repository {
-  id    Int   @id
+  id    String  @default(uuid()) @id
+  github_id Int? @unique
   owner User  @relation(fields: [ownerId], references: [id])
-  ownerId Int 
+  ownerId String 
   full_name String  @db.VarChar(255)
   description String?  @db.VarChar(255)
-  html_url  String?  @db.VarChar(255)
+  html_url  String  @db.VarChar(255)
   language  String?  @db.VarChar(255)
-  stargazers_count  Int?
+  stargazers_count  Int? @default(0)
   contributions Contribution[]
 
   @@index([full_name])
 }
 
 model Contribution {
-  id  Int @default(autoincrement()) @id
+  id    String  @default(uuid()) @id
   user  User  @relation(fields: [userId], references: [id])
-  userId Int
+  userId String
   repository  Repository @relation(fields: [repositoryId], references: [id])
-  repositoryId  Int
+  repositoryId  String
   line_count Int @default(0)
 }

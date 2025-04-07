@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CreateUserDtoSchema, UserDtoSchema } from './user.schema';
+import { CreateUserDtoSchema, GitUserDtoSchema } from './user.schema';
 
 export const BaseRepositoryDtoSchema = z.object({
   full_name: z.string(),
@@ -10,15 +10,15 @@ export const BaseRepositoryDtoSchema = z.object({
 
 export const GitRepositoryDtoSchema = BaseRepositoryDtoSchema.extend({
   id: z.number(),
-  owner: UserDtoSchema,
-  html_url: z.string().optional(),
+  owner: GitUserDtoSchema,
+  html_url: z.string(),
   commits_url: z.string(),
 });
 
 export const ResponseRepositoryDtoSchema = BaseRepositoryDtoSchema.extend({
-  id: z.number(),
+  id: z.string(),
   owner: z.object({
-    id: z.number(),
+    id: z.string(),
     login: z.string(),
   }),
   _count: z
@@ -31,6 +31,13 @@ export const ResponseRepositoryDtoSchema = BaseRepositoryDtoSchema.extend({
 export const CreateRepositoryDtoSchema = BaseRepositoryDtoSchema.extend({
   owner: CreateUserDtoSchema,
 }).required();
+
+export const RepositoryQuerySchema = BaseRepositoryDtoSchema.extend({
+  id: z.string(),
+  ownerId: z.string(),
+  html_url: z.string(),
+  github_id: z.number(),
+}).partial();
 
 export const GitRepositoryPartialDtoSchema = GitRepositoryDtoSchema.partial();
 
