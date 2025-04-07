@@ -14,8 +14,9 @@ export class DataService {
     private readonly configService: ConfigService,
   ) {}
 
-  async populateDb(url: string) {
+  async populateDb(org: string) {
     const gitToken = this.configService.get<string>('GITHUB_TOKEN');
+    const url = `https://api.github.com/orgs/${org}/repos`;
     const requestConfig = {
       headers: {
         Accept: 'application/vnd.github.v3+json',
