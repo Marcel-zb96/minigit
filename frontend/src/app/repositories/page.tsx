@@ -72,7 +72,7 @@ const repositories: RepositoryCardType[] = [
 
 export default function Repository() {
   return (
-      <div className="flex flex-col gap-4 justify-center items-center p-5 ">
+      <div className="flex flex-col gap-4 justify-center items-center p-5 w-full">
         {repositories.map((repository) => {
           return <RepositoryCard key={repository.id} data={repository} />;
         })}

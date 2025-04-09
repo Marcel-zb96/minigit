@@ -5,7 +5,7 @@ import RepositoryCardFooter from "./RepositoryCardFooter";
 
 function RepositoryCard({ data }: { data: RepositoryCardType }) {
   return (
-    <div className="flex flex-col p-3 justify-between bg-indigo-900 text-white rounded-3xl h-64 w-96">
+    <div className="flex flex-col p-3 justify-between bg-indigo-900 text-white rounded-3xl h-64 w-full">
       <RepositoryCardHeader full_name={data.full_name} login={data.owner.login} />
 
       <div className="flex flex-col justify-start">

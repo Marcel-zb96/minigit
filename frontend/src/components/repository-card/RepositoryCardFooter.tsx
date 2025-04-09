@@ -22,7 +22,7 @@ function RepositoryCardFooter({
 
       <div className="flex flex-row justify-between w-full">
         
-        <div className="flex lex-row">
+        <div className="flex flex-row">
           <svg viewBox="0 0 25 20" fill="currentColor" className="size-4 mr-2 mt-0.5 text-emerald-300">
             <path
               fillRule="evenodd"
