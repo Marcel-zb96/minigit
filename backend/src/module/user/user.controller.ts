@@ -4,7 +4,7 @@ import { ResponseUserDto } from 'src/schema/user.schema';
 import { UserService } from './user.service';
 
 @UseInterceptors(CacheInterceptor)
-@Controller('/user')
+@Controller('/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

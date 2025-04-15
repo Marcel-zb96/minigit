@@ -1,27 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ResponseContributionDto } from 'src/schema/contribution.schema';
-import {
-  ResponseRepositoryDto,
-  CreateRepositoryDto,
-  ResponseRepositoryDtoSchema,
-  RepositoryQuerySchema,
-} from 'src/schema/repository.schema';
+import { ResponseRepositoryDto, CreateRepositoryDto, ResponseRepositoryDtoSchema } from 'src/schema/repository.schema';
 
 @Injectable()
 export class RepositoryService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async getRepositories(queryParam: string): Promise<ResponseRepositoryDto[]> {
-    const filter = RepositoryQuerySchema.safeParse({
-      [queryParam.split(':')[0]]: queryParam.split(':')[1],
-    });
-
-    if (!filter.success) return [];
-
     const repositories: ResponseRepositoryDto[] = await this.prismaService.repository.findMany({
       where: {
-        ...filter.data,
+        OR: [
+          { full_name: { contains: queryParam, mode: 'insensitive' } },
+          { description: { contains: queryParam, mode: 'insensitive' } },
+          { language: { contains: queryParam, mode: 'insensitive' } },
+          { owner: { login: { contains: queryParam, mode: 'insensitive' } } },
+        ],
       },
       select: {
         id: true,

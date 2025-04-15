@@ -19,6 +19,13 @@ async function bootstrap() {
     jsonDocumentUrl: 'swagger/json',
   });
 
+  app.enableCors({
+    origin: ['http://localhost:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: 'Content-Type,Authorization',
+    credentials: true,
+  });
+
   const configService: ConfigService = app.get(ConfigService);
   await app.listen(configService.get<string>('APP_PORT') ?? 3000);
 }
