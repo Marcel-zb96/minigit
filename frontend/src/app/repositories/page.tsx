@@ -1,81 +1,21 @@
-import RepositoryCard from "@/components/repository-card/RepositoryCard";
-import React from "react";
+"use client";
 
-export type RepositoryCardType = {
-  id: string;
-  full_name: string;
-  owner: { login: string };
-  description: string;
-  language: string;
-  stargazers_count: number;
-  _count: { contribution: number };
-};
-
-const repositories: RepositoryCardType[] = [
-  {
-    id: "thisisanid",
-    full_name: "full_name",
-    owner: {
-      login: "Owner",
-    },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    language: "NodeJS",
-    stargazers_count: 756,
-    _count: {
-      contribution: 12900000,
-    },
-  },
-  {
-    id: "thisisanid",
-    full_name: "full_name",
-    owner: {
-      login: "Owner",
-    },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    language: "NodeJS",
-    stargazers_count: 756,
-    _count: {
-      contribution: 12900000,
-    },
-  },
-  {
-    id: "thisisanid",
-    full_name: "full_name",
-    owner: {
-      login: "Owner",
-    },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    language: "NodeJS",
-    stargazers_count: 756,
-    _count: {
-      contribution: 12900000,
-    },
-  },
-  {
-    id: "thisisanid",
-    full_name: "full_name",
-    owner: {
-      login: "Owner",
-    },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    language: "NodeJS",
-    stargazers_count: 756,
-    _count: {
-      contribution: 12900000,
-    },
-  }
-];
+import RepositoryTable from "@/components/repository/RepositoryTable";
+import SearchInput from "@/components/search/SearchInput";
+import React, { useState } from "react";
 
 export default function Repository() {
+  const [search, setSearch] = useState<string>("");
+
   return (
-      <div className="flex flex-col gap-4 justify-center items-center p-5 w-full">
-        {repositories.map((repository) => {
-          return <RepositoryCard key={repository.id} data={repository} />;
-        })}
+    <div className="flex flex-col md:ml-96 w-full h-full">
+      <div className="flex flex-col mb-10 md:flex-row md:justify-between md:self-start md:mb-15 w-full">
+        <div className="font-extrabold self-center ml-15 mt-5 md:mt-8 text-white text-[40px] md:font-stretch-150%">
+          Repositories
+        </div>
+        <SearchInput handleSearch={setSearch} />
       </div>
+      <RepositoryTable query={search} />
+    </div>
   );
 }

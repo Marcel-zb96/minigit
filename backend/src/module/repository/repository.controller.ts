@@ -5,7 +5,7 @@ import { ResponseContributionDto } from 'src/schema/contribution.schema';
 import { ResponseRepositoryDto, CreateRepositoryDto } from 'src/schema/repository.schema';
 
 @UseInterceptors(CacheInterceptor)
-@Controller('/repository')
+@Controller('/repositories')
 export class RepositoryController {
   constructor(private readonly repositoryService: RepositoryService) {}
 
