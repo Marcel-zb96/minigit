@@ -2,6 +2,14 @@ import Navbar from "@/components/navbar/Navbar";
 import "./global.css";
 
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Bootcamp',
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
 
 export default function RootLayout({
   children,
