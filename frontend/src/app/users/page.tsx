@@ -22,15 +22,19 @@ function Users() {
             return (
               <div key={user!.login} className="contents last:[&>div]:border-b-0">
                 <div className="h-20 md:h-30 border-b-2 border-r-2 flex justify-center items-center font-extralight">
-                  <div className="relative aspect-square w-15 h-15 md:w-25 md:h-25 ">
-                    <Image
-                      src={user.avatar_url}
-                      alt="profile picture"
-                      fill
-                      sizes="w-full h-full"
-                      className="rounded-full object-cover"
-                    />
-                  </div>
+                  {user.avatar_url ? (
+                    <div className="relative aspect-square w-15 h-15 md:w-25 md:h-25 ">
+                      <Image
+                        src={user.avatar_url}
+                        alt="profile picture"
+                        fill
+                        sizes="w-full h-full"
+                        className="rounded-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="text-sm md:text-2xl md:pl-2 md:pr-2 text-center">No profile picture</div>
+                  )}
                 </div>
                 <div className="h-20 md:h-30 border-b-2 flex justify-center items-center font-extralight">
                   {user!.login}
