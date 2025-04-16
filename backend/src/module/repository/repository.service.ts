@@ -61,7 +61,7 @@ export class RepositoryService {
     return await this.prismaService.$transaction(async (prisma) => {
       const newRepository = await prisma.repository.create({
         data: {
-          full_name: repositoryDto.full_name,
+          full_name: `${repositoryDto.owner.login}/${repositoryDto.full_name}`,
           description: repositoryDto.description,
           html_url: repositoryDto.full_name,
           language: repositoryDto.language,
