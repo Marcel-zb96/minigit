@@ -43,6 +43,7 @@ export class RepositoryService {
   async getContributors(repositoryId: string): Promise<ResponseContributionDto[]> {
     return await this.prismaService.contribution.findMany({
       select: {
+        id: true,
         user: {
           select: {
             login: true,

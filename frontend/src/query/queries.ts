@@ -18,8 +18,8 @@ export async function fetchUsers(): Promise<UserResponse[]> {
     return await response.json();
 }
 
-export async function fechContributions(repositoryName: string): Promise<ContributionResponse[]> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/repositories/${repositoryName}/contributions`);
+export async function fechContributions(repositoryId: string): Promise<ContributionResponse[]> {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/repositories/${repositoryId}/contributions`);
     if (!response.ok) {
         throw new Error(response.statusText);
     }

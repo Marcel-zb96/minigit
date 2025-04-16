@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { fetchUsers } from "@/query/queries";
 import { UserResponse } from "@/schema/user.schema";
@@ -27,6 +27,7 @@ function Users() {
                       src={user.avatar_url}
                       alt="profile picture"
                       fill
+                      sizes="w-full h-full"
                       className="rounded-full object-cover"
                     />
                   </div>
@@ -39,7 +40,7 @@ function Users() {
                 </div>
               </div>
             );
-          })}{" "}
+          })}
         </div>
       </div>
     );

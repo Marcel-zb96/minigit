@@ -1,13 +1,14 @@
 "use client";
+
 import BackIcon from "@/assets/BackIcon";
 import { fechContributions } from "@/query/queries";
 import { ContributionResponse } from "@/schema/contribution.schema";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import React from "react";
+import React, { Usable, use } from "react";
 
-function Contributions({ params }: { params: { owner: string; name: string; id: string } }) {
-  const { owner, name, id } = params;
+function Contributions({ params }: { params: Usable<{ owner: string; name: string; id: string }> }) {
+  const { owner, name, id } = use(params);
 
   const { data, isSuccess } = useQuery<ContributionResponse[]>({
     queryKey: ["contributions", id],
@@ -32,7 +33,7 @@ function Contributions({ params }: { params: { owner: string; name: string; id: 
           <div className="h-24 flex justify-center items-center border-b-2 ">Line count</div>
           {data.map((contribution) => {
             return (
-              <div key={contribution.user.login} className="contents last:[&>div]:border-b-0">
+              <div key={contribution.id} className="contents last:[&>div]:border-b-0">
                 <div className="h-24 border-b-2 border-r-2 flex justify-center items-center font-extralight">
                   {contribution.user.login}
                 </div>
