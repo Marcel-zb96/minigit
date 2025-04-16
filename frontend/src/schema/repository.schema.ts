@@ -1,11 +1,11 @@
 import { z } from 'zod';
-/* import { CreateUserDtoSchema } from './user.schema'; */
+import { CreateUserSchema } from './user.schema';
 
 export const BaseRepositorySchema = z.object({
-  full_name: z.string(),
-  description: z.string().optional().nullable(),
-  language: z.string().optional().nullable(),
-  stargazers_count: z.number().optional().nullable(),
+  full_name: z.string().min(1, "Repository name is required"),
+  description: z.string().min(1, "Repository description is required"),
+  language: z.string(),
+  stargazers_count: z.number().default(0),
 });
 
 export const RepositoryResponseSchema = BaseRepositorySchema.extend({
@@ -21,10 +21,10 @@ export const RepositoryResponseSchema = BaseRepositorySchema.extend({
     .default({ contributions: 0 }),
 });
 
-/* export const CreateRepositoryDtoSchema = BaseRepositoryDtoSchema.extend({
-  owner: CreateUserDtoSchema,
+export const CreateRepositorySchema = BaseRepositorySchema.extend({
+  owner: CreateUserSchema,
 }).required();
- */
+
 
 export type RepositoryResponse = z.infer<typeof RepositoryResponseSchema>;
-/* export type CreateRepositoryDto = z.infer<typeof CreateRepositoryDtoSchema>; */
+export type CreateRepository = z.infer<typeof CreateRepositorySchema>;

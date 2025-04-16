@@ -43,6 +43,7 @@ export class RepositoryService {
   async getContributors(repositoryId: string): Promise<ResponseContributionDto[]> {
     return await this.prismaService.contribution.findMany({
       select: {
+        id: true,
         user: {
           select: {
             login: true,
@@ -60,7 +61,7 @@ export class RepositoryService {
     return await this.prismaService.$transaction(async (prisma) => {
       const newRepository = await prisma.repository.create({
         data: {
-          full_name: repositoryDto.full_name,
+          full_name: `${repositoryDto.owner.login}/${repositoryDto.full_name}`,
           description: repositoryDto.description,
           html_url: repositoryDto.full_name,
           language: repositoryDto.language,

@@ -1,13 +1,14 @@
 "use client";
+
 import BackIcon from "@/assets/BackIcon";
 import { fechContributions } from "@/query/queries";
 import { ContributionResponse } from "@/schema/contribution.schema";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import React from "react";
+import React, { Usable, use } from "react";
 
-function Contributions({ params }: { params: { owner: string; name: string; id: string } }) {
-  const { owner, name, id } = params;
+function Contributions({ params }: { params: Usable<{ owner: string; name: string; id: string }> }) {
+  const { owner, name, id } = use(params);
 
   const { data, isSuccess } = useQuery<ContributionResponse[]>({
     queryKey: ["contributions", id],
@@ -24,24 +25,32 @@ function Contributions({ params }: { params: { owner: string; name: string; id: 
             </Link>
             <div>{`${owner}/${name}`}</div>
           </div>
-          <div className="hidden md:block">{">"}</div>
+          <div className="hidden md:block">{"-"}</div>
           <div className="text-emerald-500 self-center">Contributions</div>
         </div>
         <div className="ml-18 md:ml-22 mb-15 grid grid-cols-2 md:mr-20 bg-indigo-900 text-white text-sm md:text-2xl rounded-4xl w-9/12 md:w-1/3 md:min-w-2xl font-extrabold font-stretch-120%">
           <div className="h-24 flex justify-center items-center  border-r-2 border-b-2">User login</div>
           <div className="h-24 flex justify-center items-center border-b-2 ">Line count</div>
-          {data.map((contribution) => {
-            return (
-              <div key={contribution.user.login} className="contents last:[&>div]:border-b-0">
-                <div className="h-24 border-b-2 border-r-2 flex justify-center items-center font-extralight">
-                  {contribution.user.login}
+          {data.length > 0 ? 
+          (
+            data.map((contribution) => {
+              return (
+                <div key={contribution.id} className="contents last:[&>div]:border-b-0">
+                  <div className="h-24 border-b-2 border-r-2 flex justify-center items-center font-extralight">
+                    {contribution.user.login}
+                  </div>
+                  <div className="h-24 border-b-2 flex justify-center items-center font-extralight">
+                    {contribution.line_count}
+                  </div>
                 </div>
-                <div className="h-24 border-b-2 flex justify-center items-center font-extralight">
-                  {contribution.line_count}
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div key={"-"} className="contents last:[&>div]:border-b-0">
+              <div className="h-24 border-b-2 border-r-2 flex justify-center items-center font-extralight">-</div>
+              <div className="h-24 border-b-2 flex justify-center items-center font-extralight">-</div>
+            </div>
+          )}
         </div>
       </div>
     );

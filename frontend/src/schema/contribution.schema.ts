@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const ContributionResponseSchema = z.object({
+  id: z.string(),
   user: z.object({
     login: z.string(),
   }),

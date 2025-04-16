@@ -14,6 +14,7 @@ export const ContributionDtoSchema = z.object({
 });
 
 export const ResponseContributionDtoSchema = z.object({
+  id: z.string(),
   user: z.object({
     login: z.string(),
   }),
