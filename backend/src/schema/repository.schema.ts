@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CreateUserDtoSchema, GitUserDtoSchema } from './user.schema';
+import { createZodDto } from '@anatine/zod-nestjs';
 
 export const BaseRepositoryDtoSchema = z.object({
   full_name: z.string(),
@@ -45,3 +46,5 @@ export type GitRepositoryDto = z.infer<typeof GitRepositoryDtoSchema>;
 export type GitRepositoryPartialDto = z.infer<typeof GitRepositoryPartialDtoSchema>;
 export type ResponseRepositoryDto = z.infer<typeof ResponseRepositoryDtoSchema>;
 export type CreateRepositoryDto = z.infer<typeof CreateRepositoryDtoSchema>;
+
+export class CreateRepositoryDtoSwagger extends createZodDto(CreateRepositoryDtoSchema) {}
