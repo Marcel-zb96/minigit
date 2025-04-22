@@ -1,8 +1,29 @@
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
-function RepositoryIcon({ classes }: { classes: string }) {
+type RepositoryIconProps = {
+  fill?: string;
+  viewBox?: string;
+  strokeWidth?: string;
+  stroke?: string;
+  classes?: string;
+};
+
+export const RepositoryIcon = ({
+  fill = "none",
+  viewBox = "0 0 24 24",
+  strokeWidth = "0.5",
+  stroke = "currentColor",
+  classes,
+}: RepositoryIconProps) => {
   return (
-    <svg fill="none" viewBox="0 0 24 24" strokeWidth={0.5} stroke="currentColor" className={`${classes}`}>
+    <svg
+      fill={fill}
+      viewBox={viewBox}
+      strokeWidth={strokeWidth}
+      stroke={stroke}
+      className={twMerge("size-14", classes)}
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -10,6 +31,4 @@ function RepositoryIcon({ classes }: { classes: string }) {
       />
     </svg>
   );
-}
-
-export default RepositoryIcon;
+};
