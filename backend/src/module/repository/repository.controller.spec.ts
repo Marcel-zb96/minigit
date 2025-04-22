@@ -75,6 +75,7 @@ describe('RepositoryController', () => {
             login: 'test_username',
           },
           line_count: 0,
+          id: '1',
         },
       ];
 

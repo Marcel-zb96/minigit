@@ -1,10 +1,10 @@
 "use client";
 
-import RepositoryTable from "@/components/repository/RepositoryTable";
-import SearchInput from "@/components/search/SearchInput";
+import { RepositoryTable } from "@/components/repository/RepositoryTable";
+import { SearchInput } from "@/components/search/SearchInput";
 import React, { useState } from "react";
 
-export default function Repository() {
+const Repository = () => {
   const [search, setSearch] = useState<string>("");
 
   return (
@@ -19,3 +19,5 @@ export default function Repository() {
     </div>
   );
 }
+
+export default Repository;

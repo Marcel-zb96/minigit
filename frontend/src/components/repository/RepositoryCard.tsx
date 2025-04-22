@@ -1,10 +1,12 @@
 import React from "react";
-import RepositoryCardHeader from "./RepositoryCardHeader";
-import RepositoryCardFooter from "./RepositoryCardFooter";
+import { RepositoryCardHeader } from "./RepositoryCardHeader";
+import { RepositoryCardFooter } from "./RepositoryCardFooter";
 import Link from "next/link";
 import { RepositoryResponse } from "@/schema/repository.schema";
 
-function RepositoryCard({ data }: { data: RepositoryResponse }) {
+type RepositoryCardProps = { data: RepositoryResponse };
+
+export const RepositoryCard = ({ data }: RepositoryCardProps) => {
   return (
     <Link
       href={`repositories/${data.full_name}/${data.id}`}
@@ -21,13 +23,11 @@ function RepositoryCard({ data }: { data: RepositoryResponse }) {
 
       <div className="flex overflow-x-scroll">
         <RepositoryCardFooter
-          language={data.language || ''}
+          language={data.language || ""}
           contribution={data._count.contributions}
-          stargazers_count={data.stargazers_count || 0} 
+          stargazers_count={data.stargazers_count || 0}
         />
       </div>
     </Link>
   );
-}
-
-export default RepositoryCard;
+};

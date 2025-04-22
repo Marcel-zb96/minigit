@@ -1,17 +1,14 @@
 import React from "react";
 
-function RepositoryCardFooter({
-  language,
-  contribution,
-  stargazers_count,
-}: {
+type RepositoryCardFooterProps = {
   language: string;
   contribution: number;
   stargazers_count: number;
-}) {
+};
+
+export const RepositoryCardFooter = ({ language, contribution, stargazers_count }: RepositoryCardFooterProps) => {
   return (
     <div className="flex flex-col grow justify-end pl-2">
-
       <div className="flex flex-row w-full">
         <svg fill="currentColor" strokeWidth={0.5} className="mr-2 mt-1 md:mt-0 size-4 md:size-7" viewBox="0 0 16 16">
           <path d="M14 5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM2 4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
@@ -21,9 +18,12 @@ function RepositoryCardFooter({
       </div>
 
       <div className="flex flex-row justify-between w-full">
-        
         <div className="flex flex-row">
-          <svg viewBox="0 0 25 26" fill="currentColor" className="size-4 mr-2 mt-1 text-emerald-300 md:size-7 md:mt-0.5">
+          <svg
+            viewBox="0 0 25 26"
+            fill="currentColor"
+            className="size-4 mr-2 mt-1 text-emerald-300 md:size-7 md:mt-0.5"
+          >
             <path
               fillRule="evenodd"
               d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
@@ -37,10 +37,7 @@ function RepositoryCardFooter({
           <div className="text-sm font-extralight mr-2 md:text-2xl">Contributions: </div>
           <div className="text-sm font-bold text-emerald-300 md:text-2xl md:pr-1">{contribution}</div>
         </div>
-      
       </div>
     </div>
   );
-}
-
-export default RepositoryCardFooter;
+};

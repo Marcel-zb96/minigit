@@ -1,6 +1,6 @@
 "use client";
 
-import CreateRepositoryForm from "@/components/repository/CreateRepositoryForm";
+import { CreateRepositoryForm } from "@/components/repository/CreateRepositoryForm";
 import { createRepository as postRepository } from "@/query/queries";
 import { CreateRepository } from "@/schema/repository.schema";
 import { useMutation } from "@tanstack/react-query";
@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { SubmitHandler } from "react-hook-form";
 
-function CreateRepositoryPage() {
+const CreateRepositoryPage = () => {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: postRepository,
