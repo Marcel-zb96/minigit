@@ -1,16 +1,16 @@
 "use client";
 
-import BootCampIcon from "@/assets/BootCampIcon";
-import PlusIcon from "@/assets/PlusIcon";
-import RepositoryIcon from "@/assets/RepositoryIcon";
-import UserIcon from "@/assets/UserIcon";
+import { BootCampIcon } from "@/assets/BootCampIcon";
+import { PlusIcon } from "@/assets/PlusIcon";
+import { RepositoryIcon } from "@/assets/RepositoryIcon";
+import { UserIcon } from "@/assets/UserIcon";
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-function Navbar() {
+export const Navbar = () => {
   const pathname = usePathname();
 
   const isOnPage = (path: string): boolean => {
@@ -20,7 +20,7 @@ function Navbar() {
   return (
     <div className="flex flex-col fixed justify-start md:w-96 h-full bg-blue-950">
       <div className="flex flex-col md:flex-row justify-center gap-3 md:justify-start p-2 items-center w-full md:h-20 md:ml-7 mb-10 mt-5 text-white ">
-        <BootCampIcon classes={"size-12 md:size-14"} />
+        <BootCampIcon />
         <div className="hidden md:block font-extrabold font-stretch-125% text-[40px] ">BootCamp</div>
       </div>
 
@@ -32,7 +32,7 @@ function Navbar() {
             clsx({ "text-emerald-600": isOnPage("/repositories") })
           )}
         >
-          <RepositoryIcon classes={"size-14"} />
+          <RepositoryIcon />
           <div className="hidden md:block md:ml-4 font-extralight text-3xl ">Repositories</div>
         </Link>
 
@@ -43,7 +43,7 @@ function Navbar() {
             clsx({ "text-emerald-600": isOnPage("/create") })
           )}
         >
-          <PlusIcon classes={"size-14"} />
+          <PlusIcon />
           <div className="hidden md:block md:ml-4 font-extralight text-3xl">Add repository</div>
         </Link>
 
@@ -54,12 +54,10 @@ function Navbar() {
             clsx({ "text-emerald-600": isOnPage("/users") })
           )}
         >
-          <UserIcon classes={"size-10 md:size-14"} />
+          <UserIcon />
           <div className="hidden md:block md:ml-3 font-extralight text-3xl">User List</div>
         </Link>
       </div>
     </div>
   );
-}
-
-export default Navbar;
+};
