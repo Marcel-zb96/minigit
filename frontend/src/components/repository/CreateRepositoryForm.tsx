@@ -53,7 +53,7 @@ const t = useTranslations("Create");
           />
           <FormSelect label={t("userType")} register={register("owner.type")} options={[t("User"), t("Organization")]} />
         </div>
-        <button className="border-5 font-bold rounded-md bg-white md:bg-inherit border-white self-center md:self-end p-2 mt-10 w-36 font-stretch-120% text-black md:text-white hover:bg-white hover:text-black">
+        <button className="border-5 font-bold rounded-md bg-white md:bg-inherit border-white self-center md:self-end p-2 mt-10 w-36 min-w-max font-stretch-120% text-black md:text-white hover:bg-white hover:text-black">
           {t("create")}
         </button>
       </div>
