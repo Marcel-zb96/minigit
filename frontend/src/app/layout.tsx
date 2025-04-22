@@ -1,21 +1,23 @@
-import Navbar from "@/components/navbar/Navbar";
+import { Navbar } from "@/components/navbar/Navbar";
 import "./global.css";
 
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Bootcamp',
+  title: "Bootcamp",
   icons: {
-    icon: '/favicon.ico',
+    icon: "/favicon.ico",
   },
 };
 
-export default function RootLayout({
+type RootLayoputProps = {
+  readonly children: React.ReactNode;
+};
+
+const RootLayout = ({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: RootLayoputProps) => {
   return (
     <html lang="en">
       <body>
@@ -29,3 +31,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+export default RootLayout;
