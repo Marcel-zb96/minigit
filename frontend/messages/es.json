@@ -1,0 +1,41 @@
+{
+    "Navbar": {
+        "add": "Agregar repositorio",
+        "repos": "Repositorios",
+        "users": "Usuarios"
+    },
+
+    "Create": {
+        "title": "Crear repositorio manualmente",
+        "userNameLengthError": "El nombre de usuario es obligatorio y debe tener más de 3 caracteres",
+        "noRepoName": "El nombre del repositorio es obligatorio",
+        "noRepoDescription": "La descripción del repositorio es obligatoria",
+        "User": "Usuario",
+        "Organization": "Organización",
+        "repoName": "Nombre del repositorio",
+        "desc": "Descripción",
+        "lang": "Idioma",
+        "starGazersCount": "Número de Stargazers",
+        "username": "Nombre de usuario",
+        "userType": "Tipo de usuario",
+        "create": "Crear"
+    },
+    "RepositoriesPage": {
+        "title": "Repositorios",
+        "search": "Buscar..."
+    },
+    "ContributionsPage": {
+        "title": "Contribuciones",
+        "lineCountHeader": "Número de líneas",
+        "userNameHeader": "Nombre de usuario"
+    },
+    "Users": {
+        "title": "Lista de usuarios",
+        "avatar": "Avatar de perfil",
+        "login": "Nombre de usuario",
+        "type": "Tipo de usuario",
+        "empty": "Sin foto de perfil",
+        "User": "Usuario",
+        "Organization": "Organización"
+    }
+}

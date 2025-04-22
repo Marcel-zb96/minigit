@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CreateUserSchema } from './user.schema';
+import { createUserSchema, CreateUserSchema } from './user.schema';
 
 export const BaseRepositorySchema = z.object({
   full_name: z.string().min(1, "Repository name is required"),
@@ -23,7 +23,22 @@ export const RepositoryResponseSchema = BaseRepositorySchema.extend({
 
 export const CreateRepositorySchema = BaseRepositorySchema.extend({
   owner: CreateUserSchema,
-}).required();
+}).required()
+
+export const baseRepositorySchema = (t: (key: string) => string) => {
+  return z.object({
+    full_name: z.string().min(1, t("noRepoName")),
+    description: z.string().min(1, t("noRepoDescription")),
+    language: z.string(),
+    stargazers_count: z.number().default(0),
+  });
+};
+
+export const createRepositorySchema = (t: (key: string) => string) => {
+  return baseRepositorySchema(t).extend({
+    owner: createUserSchema(t),
+  }).required()
+};
 
 
 export type RepositoryResponse = z.infer<typeof RepositoryResponseSchema>;
