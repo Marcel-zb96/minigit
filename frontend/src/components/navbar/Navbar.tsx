@@ -5,6 +5,7 @@ import { PlusIcon } from "@/assets/PlusIcon";
 import { RepositoryIcon } from "@/assets/RepositoryIcon";
 import { UserIcon } from "@/assets/UserIcon";
 import clsx from "clsx";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -16,6 +17,8 @@ export const Navbar = () => {
   const isOnPage = (path: string): boolean => {
     return pathname.startsWith(path);
   };
+
+  const t = useTranslations("Navbar");
 
   return (
     <div className="flex flex-col fixed justify-start md:w-96 h-full bg-blue-950">
@@ -33,7 +36,7 @@ export const Navbar = () => {
           )}
         >
           <RepositoryIcon />
-          <div className="hidden md:block md:ml-4 font-extralight text-3xl ">Repositories</div>
+          <div className="hidden md:block md:ml-4 font-extralight text-3xl ">{t("repos")}</div>
         </Link>
 
         <Link
@@ -44,7 +47,7 @@ export const Navbar = () => {
           )}
         >
           <PlusIcon />
-          <div className="hidden md:block md:ml-4 font-extralight text-3xl">Add repository</div>
+          <div className="hidden md:block md:ml-4 font-extralight text-3xl">{t("add")}</div>
         </Link>
 
         <Link
@@ -55,7 +58,7 @@ export const Navbar = () => {
           )}
         >
           <UserIcon />
-          <div className="hidden md:block md:ml-3 font-extralight text-3xl">User List</div>
+          <div className="hidden md:block md:ml-3 font-extralight text-3xl">{t("users")}</div>
         </Link>
       </div>
     </div>

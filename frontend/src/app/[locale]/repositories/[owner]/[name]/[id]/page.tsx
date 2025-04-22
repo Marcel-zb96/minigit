@@ -4,11 +4,14 @@ import { BackIcon } from "@/assets/BackIcon";
 import { fechContributions } from "@/query/queries";
 import { ContributionResponse } from "@/schema/contribution.schema";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import React, { Usable, use } from "react";
 
 const Contributions = ({ params }: { params: Usable<{ owner: string; name: string; id: string }> }) => {
   const { owner, name, id } = use(params);
+
+  const t = useTranslations('ContributionsPage');
 
   const { data, isSuccess } = useQuery<ContributionResponse[]>({
     queryKey: ["contributions", id],
@@ -27,11 +30,11 @@ const Contributions = ({ params }: { params: Usable<{ owner: string; name: strin
           <div>{`${owner}/${name}`}</div>
         </div>
         <div className="hidden md:block">{"-"}</div>
-        <div className="text-emerald-500 self-center">Contributions</div>
+        <div className="text-emerald-500 self-center">{t('title')}</div>
       </div>
       <div className="ml-18 md:ml-22 mb-15 grid grid-cols-2 md:mr-20 bg-indigo-900 text-white text-sm md:text-2xl rounded-4xl w-9/12 md:w-1/3 md:min-w-2xl font-extrabold font-stretch-120%">
-        <div className="h-24 flex justify-center items-center  border-r-2 border-b-2">User login</div>
-        <div className="h-24 flex justify-center items-center border-b-2 ">Line count</div>
+        <div className="h-24 flex justify-center items-center  border-r-2 border-b-2">{t('userNameHeader')}</div>
+        <div className="h-24 flex justify-center items-center border-b-2 ">{t('lineCountHeader')}</div>
         {data.length > 0 ? (
           data.map((contribution) => {
             return (

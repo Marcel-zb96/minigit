@@ -1,0 +1,40 @@
+{
+    "Navbar": {
+        "add": "Add repository",
+        "repos": "Repositories",
+        "users": "User list"
+    },
+    "Create": {
+        "title": "Crearte repository manually",
+        "userNameLengthError": "Username is required with more than 3 characters",
+        "noRepoName": "Repository name is required",
+        "noRepoDescription": "Repository description is required",
+        "User": "User",
+        "Organization": "Organization",
+        "repoName": "Repository name",
+        "desc": "Description",
+        "lang": "Language",
+        "starGazersCount": "Stargazers count",
+        "username": "User name",
+        "userType": "User type",
+        "create": "Create"
+    },
+    "RepositoriesPage": {
+        "title": "Repositories",
+        "search": "Search..."
+    },
+    "ContributionsPage": {
+        "title": "Contributions",
+        "lineCountHeader": "Line Count",
+        "userNameHeader": "User Login"
+    },
+    "Users": {
+        "title": "User list",
+        "avatar": "Avatar",
+        "login": "Login",
+        "type": "Type",
+        "empty": "No profile picture",
+        "User": "User",
+        "Organization": "Organization"
+    }
+}

@@ -2,22 +2,25 @@
 
 import { RepositoryTable } from "@/components/repository/RepositoryTable";
 import { SearchInput } from "@/components/search/SearchInput";
+import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 
 const Repository = () => {
   const [search, setSearch] = useState<string>("");
 
+  const t = useTranslations("RepositoriesPage");
+
   return (
     <div className="flex flex-col md:ml-96 w-full h-full">
       <div className="flex flex-col mb-10 md:flex-row md:justify-between md:self-start md:mb-15 w-full">
         <div className="font-extrabold self-center ml-15 mt-5 md:mt-8 text-white text-[40px] md:font-stretch-150%">
-          Repositories
+          {t("title")}
         </div>
         <SearchInput handleSearch={setSearch} />
       </div>
       <RepositoryTable query={search} />
     </div>
   );
-}
+};
 
 export default Repository;
