@@ -11,7 +11,10 @@ const Users = () => {
 
   const t = useTranslations('Users');
 
-  if (!isSuccess) return;
+  if (!isSuccess) {
+    console.log('Its a me a render!')
+    return
+  };
 
   return (
     <div className="flex flex-col items-center w-full h-full md:items-start md:ml-96 ">

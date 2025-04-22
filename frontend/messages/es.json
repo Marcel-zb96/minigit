@@ -4,7 +4,6 @@
         "repos": "Repositorios",
         "users": "Usuarios"
     },
-
     "Create": {
         "title": "Crear repositorio manualmente",
         "userNameLengthError": "El nombre de usuario es obligatorio y debe tener más de 3 caracteres",
@@ -36,6 +35,7 @@
         "type": "Tipo de usuario",
         "empty": "Sin foto de perfil",
         "User": "Usuario",
-        "Organization": "Organización"
+        "Organization": "Organización",
+        "Bot": "Bot"
     }
 }

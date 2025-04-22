@@ -10,6 +10,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { twMerge } from "tailwind-merge";
+import LangSelect from "./LangSelect";
+
+
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -61,6 +64,7 @@ export const Navbar = () => {
           <div className="hidden md:block md:ml-3 font-extralight text-3xl">{t("users")}</div>
         </Link>
       </div>
+      <LangSelect />
     </div>
   );
 };

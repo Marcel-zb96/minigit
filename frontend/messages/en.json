@@ -35,6 +35,7 @@
         "type": "Type",
         "empty": "No profile picture",
         "User": "User",
-        "Organization": "Organization"
+        "Organization": "Organization",
+        "Bot": "Bot"
     }
 }

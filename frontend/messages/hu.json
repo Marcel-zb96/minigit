@@ -1,0 +1,41 @@
+{
+    "Navbar": {
+        "add": "Tároló hozzáadása",
+        "repos": "Tárolók",
+        "users": "Felhasználó lista"
+    },
+    "Create": {
+        "title": "Tároló manuális létrehozása",
+        "userNameLengthError": "A felhasználónév legalább 3 karakter hosszú kell legyen",
+        "noRepoName": "A tároló neve szükséges",
+        "noRepoDescription": "A tároló leírása szükséges",
+        "User": "Felhasználó",
+        "Organization": "Szervezet",
+        "repoName": "Tároló neve",
+        "desc": "Leírás",
+        "lang": "Nyelv",
+        "starGazersCount": "Csillagnézők száma",
+        "username": "Felhasználónév",
+        "userType": "Felhasználó típus",
+        "create": "Létrehozás"
+    },
+    "RepositoriesPage": {
+        "title": "Tárolók",
+        "search": "Keresés..."
+    },
+    "ContributionsPage": {
+        "title": "Hozzájárulások",
+        "lineCountHeader": "Sorok száma",
+        "userNameHeader": "Felhasználónév"
+    },
+    "Users": {
+        "title": "Felhasználói lista",
+        "avatar": "Avatár",
+        "login": "Felhasználónév",
+        "type": "Típus",
+        "empty": "Nincs profilkép",
+        "User": "Felhasználó",
+        "Organization": "Szervezet",
+        "Bot": "Bot"
+    }
+}
