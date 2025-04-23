@@ -18,7 +18,8 @@ export const Navbar = () => {
   const pathname = usePathname();
 
   const isOnPage = (path: string): boolean => {
-    return pathname.startsWith(path);
+    const pathnameSegments = pathname.split('/');
+    return pathnameSegments[2].startsWith(path);
   };
 
   const t = useTranslations("Navbar");
@@ -35,7 +36,7 @@ export const Navbar = () => {
           href={"/repositories"}
           className={twMerge(
             "flex flex-col md:flex-row justify-center md:justify-start md:pl-8 items-center w-full text-white p-2 md:hover:brightness-110 md:hover:bg-white/10",
-            clsx({ "text-emerald-600": isOnPage("/repositories") })
+            clsx({ "text-emerald-600": isOnPage("repositories") })
           )}
         >
           <RepositoryIcon />
@@ -46,7 +47,7 @@ export const Navbar = () => {
           href={"/create"}
           className={twMerge(
             "flex flex-col md:flex-row justify-center md:justify-start md:pl-8 items-center w-full text-white p-2 md:hover:bg-white/10",
-            clsx({ "text-emerald-600": isOnPage("/create") })
+            clsx({ "text-emerald-600": isOnPage("create") })
           )}
         >
           <PlusIcon />
@@ -57,7 +58,7 @@ export const Navbar = () => {
           href={"/users"}
           className={twMerge(
             "flex flex-col md:flex-row justify-center md:justify-start md:pl-8.5 items-center w-full text-white p-2 md:hover:bg-white/10",
-            clsx({ "text-emerald-600": isOnPage("/users") })
+            clsx({ "text-emerald-600": isOnPage("users") })
           )}
         >
           <UserIcon />
