@@ -21,8 +21,7 @@ import { RepositoryModule } from './repository/repository.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         store: await redisStore({
-          host: configService.get<string>('REDIS_HOST'),
-          port: configService.get<string>('REDIS_PORT')!,
+          url: configService.get<string>('REDIS_URL'),
           ttl: configService.get<string>('REDIS_TTL')!,
         }),
       }),
