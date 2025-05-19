@@ -8,14 +8,6 @@ type RepositoryTableProps = {
   query: string;
 };
 
-const parseRepositories = (repositories: RepositoryResponse[]) => {
-  const parsedRepositories: RepositoryResponse[][] = [];
-  for (let i = 0; i < repositories.length; i += 3) {
-    parsedRepositories.push(repositories.slice(i, i + 3));
-  }
-  return parsedRepositories;
-};
-
 export const RepositoryTable = ({ query }: RepositoryTableProps) => {
   const { data, isSuccess } = useQuery<RepositoryResponse[]>({
     queryKey: ["repositories", query],
