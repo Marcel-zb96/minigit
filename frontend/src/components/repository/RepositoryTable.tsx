@@ -26,7 +26,6 @@ export const RepositoryTable = ({ query }: RepositoryTableProps) => {
     return;
   }
 
-  if (process.env.NEXT_PUBLIC_USE_GRID === "true") {
     return (
       <div className="flex flex-col gap-4 ml-22 mr-5 mb-15 md:grid md:grid-cols-[repeat(auto-fit,minmax(22vw,1fr))] md:gap-10 md:mr-20 ">
         {data!.map((repository) => {
@@ -34,26 +33,4 @@ export const RepositoryTable = ({ query }: RepositoryTableProps) => {
         })}
       </div>
     );
-  }
-
-  return (
-    <div className="flex flex-col md:mr-15">
-      {parseRepositories(data).map((repositoryChunk) => {
-        return (
-          <div
-            key={data!.map((r) => r.id).join("")}
-            className="flex flex-col self-center ml-22 mr-5 md:ml-20 md:flex-row md:justify-between "
-          >
-            {repositoryChunk.map((repository) => {
-              return (
-                <div key={repository.id} className="mb-5 md:shrink-0 md:w-15/48 md:min-w-sm md:mr-4">
-                  <RepositoryCard data={repository} />
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
-    </div>
-  );
 };
