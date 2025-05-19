@@ -9,10 +9,12 @@ import { RepositoryModule } from './repository/repository.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     DataModule,
     UserModule,
     RepositoryModule,
-    ConfigModule.forRoot(),
     CacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
