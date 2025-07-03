@@ -81,7 +81,7 @@ Follow these steps to set up the project:
     npm run dev
     ```
 
-8. **RSeed the database**
+8. **Seed the database**
 
     You have to have a Personal Access Token for Github.
     The token should be in the .env fil in the backend directory
