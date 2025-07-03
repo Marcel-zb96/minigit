@@ -1,5 +1,4 @@
 import RepositoryContribution from "@/components/contribution/RepositoryContribution";
-import React, { use } from "react";
 
 type ContributionsProps = { 
   owner: string; 
@@ -7,8 +6,8 @@ type ContributionsProps = {
   id: string 
 }
 
-const Contributions = ({ params }: { params: Promise<ContributionsProps> }) => {
-  const resolvedParams = use(params);
+const Contributions = async ({ params }: { params: Promise<ContributionsProps> }) => {
+  const resolvedParams = await params;
   
   return <RepositoryContribution params={resolvedParams} />;
 };

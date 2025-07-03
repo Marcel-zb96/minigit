@@ -127,7 +127,8 @@ export class DataService {
     this.logger.log('Repositories populated');
   }
 
-  private async resetDb(): Promise<void> {
+  private async resetDb(): Promise<void> { 
+
     await this.prismaService.contribution.deleteMany();
     await this.prismaService.repository.deleteMany();
     await this.prismaService.user.deleteMany();

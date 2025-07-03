@@ -19,7 +19,7 @@ export const Navbar = () => {
 
   const isOnPage = (path: string): boolean => {
     const pathnameSegments = pathname.split('/');
-    return pathnameSegments[2].startsWith(path);
+    return pathnameSegments[2]?.startsWith(path);
   };
 
   const t = useTranslations("Navbar");
