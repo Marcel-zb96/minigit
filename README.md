@@ -41,6 +41,15 @@ Follow these steps to set up the project:
 
     - Update the `.env` file with appropriate values (database connection string, etc.).
 
+    - Copy `.env.example` to `.env` inside the `frontend` directory:
+
+      ```bash
+      cp frontend/.env.example backend/.env
+      ```
+
+    - Update the `.env` file with appropriate values (database connection string, etc.).
+
+
 4.  **Setup Database:**
     - Using Docker (Recommended):
 
@@ -69,5 +78,14 @@ Follow these steps to set up the project:
 
     run the following command on the root directory: 
     ```bash
-    npm run dex
+    npm run dev
     ```
+
+8. **RSeed the database**
+
+    You have to have a Personal Access Token for Github.
+    The token should be in the .env fil in the backend directory
+    
+    After starting the application start a HTTP call the following route:
+   
+        http://localhost:3987/api/v1/sync?org=facebook
